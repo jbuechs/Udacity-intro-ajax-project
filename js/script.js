@@ -34,6 +34,10 @@ function loadData() {
         $nytHeaderElem.text('New York Times Articles About ' + cityStr + ' Failed to Load');
     });
 
+    var wikiRequestTimeout = setTimeout(function(){
+        $wikiElem.text('Failed to get Wikipedia resources');
+    }, 8000);
+
     var ajaxUrl = 'https://en.wikipedia.org//w/api.php?action=opensearch&search=' + cityStr + '&format=json&callback=wikiCallBack';
     // load Wikipedia article
     $.ajax( {
@@ -41,12 +45,13 @@ function loadData() {
         dataType: 'jsonp',
         success: function(data) {
            var wikiTitles = data[1];
-           var wikiUrls = data[3];
-           console.log(wikiTitles, wikiUrls);
            for (var i = 0, len = wikiTitles.length; i < len; i++) {
-                var newWiki = '<ul id="wikipedia-links"><a href = "' + wikiUrls[i] + '">' + wikiTitles[i] + '</a></ul>';
+                var wikiStr = wikiTitles[i];
+                var wikiUrl = 'https://en.wikipedia.org/wiki/' + wikiStr;
+                var newWiki = '<ul id="wikipedia-links"><a href = "' + wikiUrl + '">' + wikiStr + '</a></ul>';
                 $wikiElem.append(newWiki);
            }
+           clearTimeout(wikiRequestTimeout);
     }
 } );
     return false;
