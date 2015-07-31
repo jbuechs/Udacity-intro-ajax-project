@@ -13,6 +13,7 @@ function loadData() {
     // load streetview image as background
     var streetStr = $('#street').val();
     var cityStr = $('#city').val();
+    cityStr = cityStr.slice(0, 1).toUpperCase() + cityStr.slice(1);
     var address = streetStr + ', ' + cityStr;
     $greeting.text("So, you want to live at " + address + "?");
     var imgUrl = 'http://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + address;
@@ -30,6 +31,8 @@ function loadData() {
             $nytElem.append(newArticle);
         }
         console.log(articleList, articleList.length);
+    }).error(function() {
+        $nytHeaderElem.text('New York Times Articles About ' + cityStr + ' Failed to Load');
     });
 
     return false;
